@@ -42,6 +42,12 @@ RUN apt-get -q update \
   pyrsistent==0.19.3 \
   /app/RFdiffusion/env/SE3Transformer \
   && pip install --no-cache-dir /app/RFdiffusion --no-deps
+
+# New RUN command to install numpy separately
+RUN pip install numpy==1.23.5
+
+RUN mkdir $HOME/inputs $HOME/outputs $HOME/models
+RUN bash scripts/download_models.sh $HOME/models
   
 WORKDIR /app/RFdiffusion
 
