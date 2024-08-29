@@ -19,8 +19,6 @@
 
 FROM nvcr.io/nvidia/cuda:11.6.2-cudnn8-runtime-ubuntu20.04
 
-COPY . /app/RFdiffusion/
-
 RUN apt-get -q update \ 
   && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
   git \
@@ -39,15 +37,22 @@ RUN apt-get -q update \
   git+https://github.com/NVIDIA/dllogger#egg=dllogger \
   decorator==5.1.0 \
   hydra-core==1.3.2 \
-  pyrsistent==0.19.3 \
-  /app/RFdiffusion/env/SE3Transformer \
-  && pip install --no-cache-dir /app/RFdiffusion --no-deps
+  pyrsistent==0.19.3
+
+  
+
+  # && pip install --no-cache-dir /app/RFdiffusion --no-deps
+
+COPY . /app/RFdiffusion/
+RUN pip install -q --no-cache-dir /app/RFdiffusion/env/SE3Transformer
+RUN pip install --no-cache-dir /app/RFdiffusion --no-deps
 
 # New RUN command to install numpy separately
 RUN pip install numpy==1.23.5
 
 RUN mkdir $HOME/inputs $HOME/outputs $HOME/models
-RUN bash scripts/download_models.sh $HOME/models
+RUN apt-get -q update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y wget
+RUN bash /app/RFdiffusion/scripts/download_models.sh $HOME/models
   
 WORKDIR /app/RFdiffusion
 
