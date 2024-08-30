@@ -51,7 +51,11 @@ RUN pip install --no-cache-dir /app/RFdiffusion --no-deps
 RUN pip install numpy==1.23.5
 
 RUN mkdir $HOME/inputs $HOME/outputs $HOME/models
+<<<<<<< Updated upstream
 RUN apt-get -q update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y wget
+=======
+RUN apt-get -q update DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y wget
+>>>>>>> Stashed changes
 RUN bash /app/RFdiffusion/scripts/download_models.sh $HOME/models
   
 WORKDIR /app/RFdiffusion
